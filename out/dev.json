@@ -1,0 +1,50 @@
+{
+ "planted": {
+  "tz": 200,
+  "pages": 200,
+  "weights_sum": 200,
+  "weight_swap": 188,
+  "setaside": 200,
+  "fit": 200,
+  "invented": 200,
+  "stale": 76,
+  "naics": 148
+ },
+ "caught": {
+  "tz": 200,
+  "pages": 200,
+  "weights_sum": 200,
+  "weight_swap": 188,
+  "setaside": 200,
+  "fit": 200,
+  "invented": 200,
+  "stale": 76,
+  "naics": 148
+ },
+ "named": {
+  "tz": 200,
+  "pages": 192,
+  "weights_sum": 200,
+  "weight_swap": 188,
+  "setaside": 200,
+  "fit": 200,
+  "invented": 200,
+  "stale": 76,
+  "naics": 148
+ },
+ "base": {
+  "tz": 0,
+  "pages": 0,
+  "weights_sum": 0,
+  "weight_swap": 0,
+  "setaside": 0,
+  "fit": 0,
+  "invented": 200,
+  "stale": 0,
+  "naics": 0
+ },
+ "clean": 200,
+ "clean_flag": 0,
+ "base_clean_flag": 0,
+ "clean_codes": {}
+}
