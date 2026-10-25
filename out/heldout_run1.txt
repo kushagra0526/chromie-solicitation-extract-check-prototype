@@ -1,0 +1,12 @@
+seeds 1000..1199, layouts ABC
+planted errors 4911: checker stopped 4909, named right 4275; quote-exists baseline stopped 600
+  stale        planted  297  stopped  295  named  196  baseline    0
+  tz           planted  600  stopped  600  named  400  baseline    0
+  pages        planted  600  stopped  600  named  451  baseline    0
+  weights_sum  planted  600  stopped  600  named  600  baseline    0
+  weight_swap  planted  558  stopped  558  named  372  baseline    0
+  setaside     planted  600  stopped  600  named  600  baseline    0
+  naics        planted  456  stopped  456  named  456  baseline    0
+  fit          planted  600  stopped  600  named  600  baseline    0
+  invented     planted  600  stopped  600  named  600  baseline  600
+clean records 600: checker flagged 200 {'UNREAD': 522}; baseline flagged 0

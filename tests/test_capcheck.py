@@ -37,8 +37,8 @@ class T(unittest.TestCase):
         self.assertEqual(parse_due("Offers are due no later than 2:00 PM ET on August 21, 2026."), "2026-08-21T18:00Z")
         self.assertEqual(parse_due("by 4:00 PM Pacific Time (PT) on 3 September 2026"), "2026-09-03T23:00Z")
 
-    def test_unreadable_layout_is_held_not_passed(self):
-        sol = make(1, "C")
+    def test_unreadable_text_is_held_not_passed(self):
+        sol = make(1, "C"); sol["text"] = "\n".join(x for x in sol["text"].splitlines() if "due" not in x)
         v, f = check(sol["text"], extract(sol, 1, ()), sol["profile"])
         self.assertEqual(v, "HOLD")
         self.assertIn("UNREAD", [x["code"] for x in f])

@@ -18,36 +18,43 @@ def norm(s):
 
 def parse_due(sentence):
     """UTC ISO string from 'H:MM AM/PM TZ on <date>' (month-name layouts). None if not readable."""
-    t = re.search(r"(\d{1,2}):(\d{2}) (AM|PM)", sentence)
+    t = re.search(r"(\d{1,2}):(\d{2}) (AM|PM)", sentence) or re.search(r"(12):(00) (noon)", sentence)
     z = re.search(r"\b(ET|CT|MT|PT)\b", sentence)
+    if not z:
+        z = re.search(r"\b(Eastern|Central|Mountain|Pacific)\b", sentence)
+        z = z and re.match(r"(..)", z.group(1)[0] + "T")
     d = re.search(r"(" + "|".join(MONTHS) + r") (\d{1,2}), (\d{4})", sentence)
     if d:
         mo, day, yr = MONTHS.index(d.group(1)) + 1, int(d.group(2)), int(d.group(3))
     else:
         d = re.search(r"(\d{1,2}) (" + "|".join(MONTHS) + r") (\d{4})", sentence)
-        if not d:
+        n = re.search(r"(\d{2})/(\d{2})/(\d{4})", sentence)
+        if d:
+            day, mo, yr = int(d.group(1)), MONTHS.index(d.group(2)) + 1, int(d.group(3))
+        elif n:
+            mo, day, yr = int(n.group(1)), int(n.group(2)), int(n.group(3))
+        else:
             return None
-        day, mo, yr = int(d.group(1)), MONTHS.index(d.group(2)) + 1, int(d.group(3))
     if not (t and z):
         return None
-    h = int(t.group(1)) % 12 + (12 if t.group(3) == "PM" else 0)
+    h = int(t.group(1)) % 12 + (12 if t.group(3) in ("PM", "noon") else 0)
     return (datetime(yr, mo, day, h, int(t.group(2))) - timedelta(hours=OFFSET[z.group(1)])).strftime("%Y-%m-%dT%H:%MZ")
 
 
 def parse_pages(sentence):
-    m = re.search(r"(\d+) pages", sentence)
+    m = re.search(r"\((\d+)\) pages", sentence) or re.search(r"(\d+) pages", sentence)
     return int(m.group(1)) if m else None
 
 
 def parse_weights(text):
-    s = pick(text, "Evaluation factors:") or pick(text, "scored out of 100") or ""
+    s = pick(text, "Evaluation factors:") or pick(text, "scored out of 100") or pick(text, "Relative weight of each factor:") or ""
     s = s.split(":", 1)[1] if ":" in s else s
     out = {}
     for item in re.split(r",\s*|;\s*", s.rstrip(".")):
-        m = re.match(r"^(.*?)\s*(?:\((\d+)%\)|- (\d+) points)$", item.strip())
+        m = re.match(r"^(.*?)\s*(?:\((\d+)%\)|- (\d+) points|(\d+) percent)$", item.strip())
         if not m:
             return None
-        out[m.group(1)] = int(m.group(2) or m.group(3))
+        out[m.group(1)] = int(m.group(2) or m.group(3) or m.group(4))
     return out or None
 
 
